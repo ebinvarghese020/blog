@@ -102,6 +102,11 @@ def register():
     return render_template("register.html", form=form)
 
 
+@app.errorhandler(401)
+def unauthorized(e):
+    # note that we set the 404 status explicitly
+    return render_template('401.html'), 401
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -164,7 +169,7 @@ def add_new_post():
             subtitle=form.subtitle.data,
             body=form.body.data,
             img_url=form.img_url.data,
-            author_id=current_user.id,  # Use current_user.username instead of current_user
+            author_id=current_user.id,
             date=date.today().strftime("%B %d, %Y")
         )
         db.session.add(new_post)
